@@ -213,8 +213,9 @@ def plottype(df):
 #########################
 
 #FUNCTION PLOTTING MIN/MEAN/MAX TIME SERIES DATA
-def plotsing(df):    
-    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MAX): ')
+def plotsing(df):
+    print('PLEASE CHOOSE VALUES TO PLOT INCLUDING MIN, MEAN, MAX, 75TH QUANTILE AND 25TH QUANTILE!')    
+    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MAX/75Q/25Q): ')
     while plottype.lower() not in ['min', 'mean', 'max']:
         print('\nINCORRECT INPUT! PLEASE INPUT MIN OR MEAN OR MAX!')
         plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MAX): ')    
