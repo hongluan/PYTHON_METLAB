@@ -188,7 +188,7 @@ def linregress_max(df):
     return linreglst
 #########################################
 
-#FUNCTION LINEAR REGRESSION OF MAX VALUES
+#FUNCTION LINEAR REGRESSION OF 25TH QUANTILE VALUES
 def linregress_25quant(df):
     linreglst = []
     coefficients_25quant, residuals_25quant, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'25QUANT'],1,full=True)
@@ -243,6 +243,7 @@ def export2excel(df):
 #FUNCTION DECIDE PLOTTING
 def plottype(df):
     dfVAL = createVALdf(df)
+    print(dfVAL)
     plottype = input('DO YOU WANT TO PLOT INDIVIDUAL VALUE OR ALL (EACH/ALL): ')
     if plottype.lower() == 'each':
         plotsing(dfVAL)
@@ -260,16 +261,16 @@ def plottype(df):
 #FUNCTION PLOTTING MIN/MEAN/MAX TIME SERIES DATA
 def plotsing(df):
     print('PLEASE CHOOSE VALUES TO PLOT INCLUDING MIN, MEAN, MEDIAN, MAX, 75TH QUANTILE AND 25TH QUANTILE!')    
-    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/75Q/25Q): ')
+    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25Q/75Q): ')
     while plottype.lower() not in ['min', 'mean','med', 'max','25q','75q']:
         print('\nINCORRECT INPUT! PLEASE INPUT MIN OR MEAN, MEDIAN OR MAX OR 25TH QUANTILE OR 75TH QUANTILE!')
-        plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/75Q/25Q): ')    
+        plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25Q/75Q): ')    
     plottitle = input('INPUT TITLE OF PLOT: ')
     xlabel = input('INPUT LABEL FOR X AXIS: ')
     ylabel = input('INPUT LABEL FOR Y AXIS: ')
     xsize = input('INPUT HORIZONTAL SIZE OF PLOT: ')
     ysize = input('INPUT VERTICAL SIZE OF PLOT: ')
-    print('FOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com \n')
+    print('\nFOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com \n')
     datacolor = input('INPUT COLOR FOR LINE REPRESENTING MAIN DATA: ')
     trendcolor = input('INPUT COLOR FOR TREND LINE: ')
     exportbool = input('DO YOU WANT TO EXPORT TO PLOT TO FILE (YES/NO): ')
@@ -291,13 +292,14 @@ def plotsing(df):
     elif plottype.lower() == 'med':
         plt.plot(df.index,df.loc[:,'MEDIAN'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_med(df), color='#'+ trendcolor)
-    elif plottype.lower == 'max':
+    elif plottype.lower() == 'max':
         plt.plot(df.index,df.loc[:,'MAX'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_max(df), color='#'+ trendcolor)
-    elif plottype.lower == '25q':
+    elif plottype.lower() == '25q':
+        print(df.loc[:,'25QUANT'])
         plt.plot(df.index,df.loc[:,'25QUANT'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_25quant(df), color='#'+ trendcolor)
-    elif plottype.lower == '75q':
+    elif plottype.lower() == '75q':
         plt.plot(df.index,df.loc[:,'75QUANT'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_75quant(df), color='#'+ trendcolor)
     plt.title(plottitle)
@@ -320,7 +322,10 @@ def plotall(df):
     print('FOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com \n')
     datacolor_min = input('INPUT COLOR FOR LINE REPRESENTING MIN VALUES: ')
     datacolor_mean = input('INPUT COLOR FOR LINE REPRESENTING MEAN VALUES: ')
+    datacolor_med = input('INPUT COLOR FOR LINE REPRESENTING MEDIAN VALUES: ')
     datacolor_max = input('INPUT COLOR FOR LINE REPRESENTING MAX DATA: ')
+    datacolor_25per = input('INPUT COLOR FOR LINE REPRESENTING 25TH PERCENTILE DATA: ')
+    datacolor_75per = input('INPUT COLOR FOR LINE REPRESENTING 75TH PERCENTILE DATA: ')
     trendcolor = input('INPUT COLOR FOR TREND LINES: ')
     exportbool = input('DO YOU WANT TO EXPORT TO PLOT TO FILE (YES/NO): ')
     while exportbool.lower() not in ['yes','no']:
@@ -328,7 +333,10 @@ def plotall(df):
         exportbool = input('DO YOU WANT TO EXPORT TO PLOT TO FILE (YES/NO): ')
     dataline_min = mlines.Line2D([],[],color = '#' + datacolor_min, label='Min water level')
     dataline_mean = mlines.Line2D([],[],color = '#' + datacolor_mean, label='Mean water level')
+    dataline_med = mlines.Line2D([],[],color = '#' + datacolor_med, label='Median water level')
     dataline_max = mlines.Line2D([],[],color = '#' + datacolor_max, label='Max water level ')
+    dataline_25q = mlines.Line2D([],[],color = '#' + datacolor_, label='25th percentile water level ')
+    dataline_75q = mlines.Line2D([],[],color = '#' + datacolor_, label='75th percentile water level ')
     trendline = mlines.Line2D([],[],color = '#' + trendcolor, label='Trendline')
     #plt.xkcd()    
     fig = plt.figure(figsize = (int(xsize),int(ysize)))    
@@ -339,8 +347,14 @@ def plotall(df):
     plt.plot(df.index,linregress_min(df), color=trendcolor)
     plt.plot(df.index,df.loc[:,'MEAN'], color = datacolor_mean)    
     plt.plot(df.index,linregress_mean(df), color=trendcolor)
+    plt.plot(df.index,df.loc[:,'MED'], color = datacolor_mean)    
+    plt.plot(df.index,linregress_med(df), color=trendcolor)
     plt.plot(df.index,df.loc[:,'MAX'], color = datacolor_max,zorder = 1)    
-    plt.plot(df.index,linregress_max(df), color=trendcolor,zorder = 1)    
+    plt.plot(df.index,linregress_max(df), color=trendcolor,zorder = 1) 
+    plt.plot(df.index,df.loc[:,'25QUANT'], color = datacolor_mean)    
+    plt.plot(df.index,linregress_25quant(df), color=trendcolor)
+    plt.plot(df.index,df.loc[:,'75QUANT'], color = datacolor_mean)    
+    plt.plot(df.index,linregress_75quant(df), color=trendcolor)
     plt.title(plottitle)
     plt.show()
     if exportbool.lower() == 'yes':        
