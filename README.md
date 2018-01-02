@@ -1,0 +1,2 @@
+# PYTHON_METLAB
+The script reads unformatted excel file as input. The users define number of header rows, number of maximum allowable no-null cells in a cell and number of columns needed. The script then helps format the data into usable data. Current version only helps handle one excel file with many sheets. In the next version, there will be options of dealing with many excel files or only one sheet of one excel file :)
