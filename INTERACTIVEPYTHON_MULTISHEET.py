@@ -260,10 +260,10 @@ def plottype(df):
 #FUNCTION PLOTTING MIN/MEAN/MAX TIME SERIES DATA
 def plotsing(df):
     print('PLEASE CHOOSE VALUES TO PLOT INCLUDING MIN, MEAN, MEDIAN, MAX, 25TH PERCENTILE AND 75TH QUANTILE!')    
-    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25P/75P): ')
-    while plottype.lower() not in ['min', 'mean','med', 'max','25p','75p']:
+    plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25PER/75PER): ')
+    while plottype.lower() not in ['min', 'mean','med', 'max','25per','75per']:
         print('\nINCORRECT INPUT! PLEASE INPUT MIN OR MEAN, MEDIAN OR MAX OR 25TH PERCENTILE OR 75TH PERCENTILE!')
-        plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25P/75P): ')    
+        plottype = input('INPUT TYPE OF DATA TO PLOT (MIN/MEAN/MED/MAX/25PER/75PER): ')    
     plottitle = input('INPUT TITLE OF PLOT: ')
     xlabel = input('INPUT LABEL FOR X AXIS: ')
     ylabel = input('INPUT LABEL FOR Y AXIS: ')
@@ -294,10 +294,10 @@ def plotsing(df):
     elif plottype.lower() == 'max':
         plt.plot(df.index,df.loc[:,'MAX'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_max(df), color='#'+ trendcolor)
-    elif plottype.lower() == '25p':
+    elif plottype.lower() == '25per':
         plt.plot(df.index,df.loc[:,'25PER'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_25quant(df), color='#'+ trendcolor)
-    elif plottype.lower() == '75p':
+    elif plottype.lower() == '75per':
         plt.plot(df.index,df.loc[:,'75PER'], color = '#'+ datacolor)    
         plt.plot(df.index,linregress_75quant(df), color='#'+ trendcolor)
     plt.title(plottitle)
@@ -343,8 +343,8 @@ def plotall(df):
     plt.ylabel(ylabel)    
     plt.plot(df.index,df.loc[:,'MIN'], color ='#'+ datacolor_min)    
     plt.plot(df.index,linregress_min(df), color='#'+ trendcolor)
-    plt.plot(df.index,df.loc[:,'MEAN'], color ='#'+ datacolor_mean)    
-    plt.plot(df.index,linregress_mean(df), color='#'+ trendcolor)
+    #plt.plot(df.index,df.loc[:,'MEAN'], color ='#'+ datacolor_mean)    
+    #plt.plot(df.index,linregress_mean(df), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'MEDIAN'], color ='#'+ datacolor_med)    
     plt.plot(df.index,linregress_med(df), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'MAX'], color ='#'+ datacolor_max)    
