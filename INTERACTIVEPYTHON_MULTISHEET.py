@@ -10,7 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 import numpy as np
-from scipy.misc import imread
+#from scipy.misc import imread
 
 menu_actions = {}
 
@@ -144,6 +144,18 @@ def createthreshdf(df, thresval):
     return dffil_idx
 #############################################
 
+#FUNCTION LINEAR REGRESSION
+def linregress(df,val):
+    linreglst = []
+    coefficients_min, residuals_min, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,val],1,full=True)
+    mse_min = residuals_min[0]/(len(df.index))
+    nrmse_min = np.sqrt(mse_min)/(df.loc[:,val].max()-df.loc[:,val].min())
+    for x in range(len(df.loc[:,val])):
+        linreglst.append(coefficients_min[0]*x + coefficients_min[1])    
+    return linreglst
+    
+#
+    
 #FUNCTION LINEAR REGRESSION OF MIN VALUES
 def linregress_min(df):
     linreglst = []
@@ -243,12 +255,22 @@ def export2excel(df):
 #FUNCTION DECIDE PLOTTING
 def plottype(df):
     dfVAL = createVALdf(df)    
-    plottype = input('DO YOU WANT TO PLOT INDIVIDUAL VALUE OR ALL (EACH/ALL): ')
+    plottype = input('\nDO YOU WANT TO PLOT INDIVIDUAL VALUE OR ALL (EACH/ALL): ')
+    while plottype.lower() not in ['each','all']:
+        print('\nINCORRECT INPUT! PLEASE INPUT EACH OR ALL!')
+        plottype = input('\nINPUT TYPE OF DATA TO PLOT (EACH/ALL): ')
     if plottype.lower() == 'each':
         plotsing(dfVAL)
     elif plottype.lower() == 'all':
-        plotall(dfVAL)
-    print('PLEASE CHOOSE OPERATION YOU WANT: \n')
+        plotallintype = '\nDO YOU WANT TO PLOT ALL VALUES INDIVIDUALLY OR ON A SAME PLOT (IND/SAME): '
+        while plotallintype.lower() not in ['ind','same']:
+            print('\nINCORRECT INPUT! PLEASE INPUT IND OR SAME!')
+            plotallintype = input('\nDO YOU WANT TO PLOT ALL VALUES INDIVIDUALLY OR ON A SAME PLOT (IND/SAME): ')
+        if plotallintype == 'ind':
+            plotallind(dfVAL)
+        elif plotallintype == 'same':
+            plotall(dfVAL)
+    print('\nPLEASE CHOOSE OPERATION YOU WANT: \n')
     print('1. DRAW PLOTS OF TIME SERIES DATA')
     print('2. DRAW PLOTS OF VALUES ABOVE THRESHOLD')
     print('9. COME BACK TO MAIN MENU')
@@ -284,22 +306,22 @@ def plotsing(df):
     plt.ylabel(ylabel)
     if plottype.lower() == 'min':
         plt.plot(df.index,df.loc[:,'MIN'], color ='#'+ datacolor)    
-        plt.plot(df.index,linregress_min(df), color='#'+ trendcolor)        
+        plt.plot(df.index,linregress(df, 'MIN'), color='#'+ trendcolor)        
     elif plottype.lower() == 'mean':
         plt.plot(df.index,df.loc[:,'MEAN'], color = '#'+ datacolor)    
-        plt.plot(df.index,linregress_mean(df), color='#'+ trendcolor)
+        plt.plot(df.index,linregress(df,'MEAN'), color='#'+ trendcolor)
     elif plottype.lower() == 'med':
         plt.plot(df.index,df.loc[:,'MEDIAN'], color = '#'+ datacolor)    
-        plt.plot(df.index,linregress_med(df), color='#'+ trendcolor)
+        plt.plot(df.index,linregress(df,'MEDIAN'), color='#'+ trendcolor)
     elif plottype.lower() == 'max':
         plt.plot(df.index,df.loc[:,'MAX'], color = '#'+ datacolor)    
-        plt.plot(df.index,linregress_max(df), color='#'+ trendcolor)
+        plt.plot(df.index,linregress(df,'MAX'), color='#'+ trendcolor)
     elif plottype.lower() == '25per':
         plt.plot(df.index,df.loc[:,'25PER'], color = '#'+ datacolor)    
-        plt.plot(df.index,linregress_25quant(df), color='#'+ trendcolor)
+        plt.plot(df.index,linregress(df,'25PER'), color='#'+ trendcolor)
     elif plottype.lower() == '75per':
         plt.plot(df.index,df.loc[:,'75PER'], color = '#'+ datacolor)    
-        plt.plot(df.index,linregress_75quant(df), color='#'+ trendcolor)
+        plt.plot(df.index,linregress(df,'75PER'), color='#'+ trendcolor)
     plt.title(plottitle)
     plt.show()
     if exportbool.lower() == 'yes':
@@ -342,17 +364,17 @@ def plotall(df):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)    
     plt.plot(df.index,df.loc[:,'MIN'], color ='#'+ datacolor_min)    
-    plt.plot(df.index,linregress_min(df), color='#'+ trendcolor)
+    plt.plot(df.index,linregress(df, 'MIN'), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'MEAN'], color ='#'+ datacolor_mean)    
-    plt.plot(df.index,linregress_mean(df), color='#'+ trendcolor)
+    plt.plot(df.index,linregress(df,'MEAN'), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'MEDIAN'], color ='#'+ datacolor_med)    
-    plt.plot(df.index,linregress_med(df), color='#'+ trendcolor)
+    plt.plot(df.index,linregress(df, 'MEDIAN'), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'MAX'], color ='#'+ datacolor_max)    
-    plt.plot(df.index,linregress_max(df), color='#'+ trendcolor) 
+    plt.plot(df.index,linregress(df,'MAX'), color='#'+ trendcolor) 
     plt.plot(df.index,df.loc[:,'25PER'], color = '#'+ datacolor_25per)    
-    plt.plot(df.index,linregress_25quant(df), color='#'+ trendcolor)
+    plt.plot(df.index,linregress(df,'25PER'), color='#'+ trendcolor)
     plt.plot(df.index,df.loc[:,'75PER'], color ='#'+ datacolor_75per)    
-    plt.plot(df.index,linregress_75quant(df), color='#'+ trendcolor)
+    plt.plot(df.index,linregress(df,'75PER'), color='#'+ trendcolor)
     plt.title(plottitle)
     plt.show()
     if exportbool.lower() == 'yes':        
@@ -362,7 +384,63 @@ def plotall(df):
         except:
             print('PLOT HAS NOT BEEN SAVED!!!')                
 ###############################
-
+#FUNCTION PLOTTING ALL VALUES INDIVIDUALLY
+def plotallind(df):
+    plottitle = input('\nINPUT TITLE OF PLOT: ')
+    xlabel = input('\nINPUT LABEL FOR X AXIS: ')
+    ylabel = input('\nINPUT LABEL FOR Y AXIS: ')
+    xsize = input('\nINPUT HORIZONTAL SIZE OF PLOT: ')
+    ysize = input('\nINPUT VERTICAL SIZE OF PLOT: ')
+    nhorizontal = input('\nINPUT NUMBER OF PLOTS IN HORIZONTAL SIDE: ')
+    nvertical = input('\nINPUT NUMBER OF PLOTS IN VERTICAL SIDE: ')
+    print('\nFOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com')
+    datacolor_min = input('\nINPUT COLOR FOR LINE REPRESENTING MIN VALUES: ')
+    datacolor_mean = input('\nINPUT COLOR FOR LINE REPRESENTING MEAN VALUES: ')
+    datacolor_med = input('\nINPUT COLOR FOR LINE REPRESENTING MEDIAN VALUES: ')
+    datacolor_max = input('\nINPUT COLOR FOR LINE REPRESENTING MAX DATA: ')
+    datacolor_25per = input('\nINPUT COLOR FOR LINE REPRESENTING 25TH PERCENTILE DATA: ')
+    datacolor_75per = input('\nINPUT COLOR FOR LINE REPRESENTING 75TH PERCENTILE DATA: ')
+    trendcolor = input('\nINPUT COLOR FOR TREND LINES: ')
+    exportbool = input('\nDO YOU WANT TO EXPORT TO PLOT TO FILE (YES/NO): ')
+    while exportbool.lower() not in ['yes','no']:
+        print('\nINCORRECT INPUT! PLEASE INPUT YES OR NO!')
+        exportbool = input('\nDO YOU WANT TO EXPORT TO PLOT TO FILE (YES/NO): ')
+    fig = plt.figure(figsize = (int(xsize),int(ysize)))
+    list = ['MIN','MEAN','MEDIAN','MAX', '25PER', '75PER']
+    for i in range(1,8):
+        plt.subplot(int(nvertical),int(nhorizontal),i)
+        if list[i-1] == 'MIN':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('MIN')
+        elif list[i-1] == 'MEAN':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('MEAN')
+        elif list[i-1] == 'MEDIAN':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('MEDIAN')
+        elif list[i-1] == 'MAX':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('MAX')
+        elif list[i-1] == '25PER':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('25TH')
+        elif list[i-1] == '75PER':
+            plt.plot(df.index,df.loc[:,list[i-1]], color ='#'+ datacolor_min)
+            plt.plot(df.index,linregress(df,list[i-1]), color='#'+ trendcolor)
+            plt.title('75PER')
+    plt.show()   
+    if exportbool.lower() == 'yes':        
+        outplot = input('INPUT DIRECTORY AND NAME FOR OUTPUT: ')
+        try:            
+            fig.savefig(outplot)
+        except:
+            print('PLOT HAS NOT BEEN SAVED!!!')       
+##########################################
 #FUNCTION PLOTTING THRESHOLD VALUES
 def plotthreshval(dfr2c,dfthresh,threshval,savebool):    
     plottitle = input('\nINPUT TITLE OF PLOT: ')
@@ -417,7 +495,7 @@ def exec_menu(choice):
         menu_actions['main_menu']()
     else:
         try:
-            if ch == '9' or ch == '0':
+            if ch == '9':
                 menu_actions[ch]()
             else:
                 menu_actions[ch](df)
@@ -434,7 +512,8 @@ def back():
 ######################
 
 #FUNCTION EXIT PROGRAM
-def exit():
+def exit(df):
+    df = None
     sys.exit()
 ######################
     
