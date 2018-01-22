@@ -153,74 +153,9 @@ def linregress(df,val):
     for x in range(len(df.loc[:,val])):
         linreglst.append(coefficients_min[0]*x + coefficients_min[1])    
     return linreglst
+###########################
     
-#
-    
-#FUNCTION LINEAR REGRESSION OF MIN VALUES
-def linregress_min(df):
-    linreglst = []
-    coefficients_min, residuals_min, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'MIN'],1,full=True)
-    mse_min = residuals_min[0]/(len(df.index))
-    nrmse_min = np.sqrt(mse_min)/(df.loc[:,'MIN'].max()-df.loc[:,'MIN'].min())
-    for x in range(len(df.loc[:,'MIN'])):
-        linreglst.append(coefficients_min[0]*x + coefficients_min[1])    
-    return linreglst
-#########################################
 
-#FUNCTION LINEAR REGRESSION OF MEAN VALUES
-def linregress_mean(df):
-    linreglst = []
-    coefficients_mean, residuals_mean, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'MEAN'],1,full=True)
-    mse_mean = residuals_mean[0]/(len(df.index))
-    nrmse_mean = np.sqrt(mse_mean)/(df.loc[:,'MEAN'].max()-df.loc[:,'MEAN'].min())
-    for x in range(len(df.loc[:,'MEAN'])):
-        linreglst.append(coefficients_mean[0]*x + coefficients_mean[1])    
-    return linreglst
-#########################################
-
-#FUNCTION LINEAR REGRESSION OF MEDIAN VALUES
-def linregress_med(df):
-    linreglst = []
-    coefficients_med, residuals_med, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'MEDIAN'],1,full=True)
-    mse_med = residuals_med[0]/(len(df.index))
-    nrmse_med = np.sqrt(mse_med)/(df.loc[:,'MEDIAN'].max()-df.loc[:,'MEDIAN'].min())
-    for x in range(len(df.loc[:,'MEDIAN'])):
-        linreglst.append(coefficients_med[0]*x + coefficients_med[1])    
-    return linreglst
-############################################
-
-#FUNCTION LINEAR REGRESSION OF MAX VALUES
-def linregress_max(df):
-    linreglst = []
-    coefficients_max, residuals_max, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'MAX'],1,full=True)
-    mse_max = residuals_max[0]/(len(df.index))
-    nrmse_max = np.sqrt(mse_max)/(df.loc[:,'MAX'].max()-df.loc[:,'MAX'].min())
-    for x in range(len(df.loc[:,'MAX'])):
-        linreglst.append(coefficients_max[0]*x + coefficients_max[1])    
-    return linreglst
-#########################################
-
-#FUNCTION LINEAR REGRESSION OF 25TH QUANTILE VALUES
-def linregress_25quant(df):
-    linreglst = []
-    coefficients_25quant, residuals_25quant, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'25PER'],1,full=True)
-    mse_25quant = residuals_25quant[0]/(len(df.index))
-    nrmse_25quant = np.sqrt(mse_25quant)/(df.loc[:,'25PER'].max()-df.loc[:,'25PER'].min())
-    for x in range(len(df.loc[:,'25PER'])):
-        linreglst.append(coefficients_25quant[0]*x + coefficients_25quant[1])    
-    return linreglst
-#########################################
-
-#FUNCTION LINEAR REGRESSION OF MAX VALUES
-def linregress_75quant(df):
-    linreglst = []
-    coefficients_75quant, residuals_75quant, _, _, _  = np.polyfit(range(len(df.index)), df.loc[:,'75PER'],1,full=True)
-    mse_75quant = residuals_75quant[0]/(len(df.index))
-    nrmse_75quant = np.sqrt(mse_75quant)/(df.loc[:,'75PER'].max()-df.loc[:,'75PER'].min())
-    for x in range(len(df.loc[:,'75PER'])):
-        linreglst.append(coefficients_75quant[0]*x + coefficients_75quant[1])    
-    return linreglst
-#########################################
 
 #CREATE DATAFRAME
 df = createdf(workbook,int(numrowhdr), int(threshold), int(needcols))
@@ -448,8 +383,8 @@ def plotthreshval(dfr2c,dfthresh,threshval,savebool):
     ylabel = input('\nINPUT LABEL FOR Y AXIS: ')
     xsize = input('\nINPUT HORIZONTAL SIZE OF PLOT: ')
     ysize = input('\nINPUT VERTICAL SIZE OF PLOT: ')
-    print('\nFOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com \n')        
-    threshvalcolr = input('INPUT COLOR FOR VALUE ABOVE THRESHOLD: ')        
+    print('\nFOR COLOR CODE PLEASE GO TO WEBSITE: http://htmlcolorcodes.com')        
+    threshvalcolr = input('\nINPUT COLOR FOR VALUE ABOVE THRESHOLD: ')        
     fig = plt.figure(figsize = (int(xsize),int(ysize)))   
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
